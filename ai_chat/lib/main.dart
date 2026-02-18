@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ChatMessage {
   final String text;
@@ -9,7 +10,8 @@ class ChatMessage {
   ChatMessage({required this.text, required this.isUser});
 }
 
-void main() {
+Future<void> main() async {
+  await dotenv.load(fileName: ".env");
   runApp(const MyApp());
 }
 
@@ -36,7 +38,7 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   final List<ChatMessage> _messages = [];
   final TextEditingController _controller = TextEditingController();
-  final String _apiKey = 'AIzaSyAn1rCLYZjvclfqT_7nSn_MvWioYgZCrwA';
+  final String _apiKey = dotenv.env['GEMINI_API_KEY'] ?? '';
   bool _isAITyping = false;
 
   Future<String> _getAIResponse(String userMessage) async {
